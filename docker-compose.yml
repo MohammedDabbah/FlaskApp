@@ -1,0 +1,29 @@
+version: '3'
+services:
+  db:
+    image: postgres:13   # Use the official PostgreSQL image
+    environment:
+      POSTGRES_USER: flaskuser
+      POSTGRES_PASSWORD: mysecurepassword123!  # Your chosen password
+      POSTGRES_DB: flask_openai_app
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist database data
+
+  web:
+    build: .   # Build Flask app from the Dockerfile
+    command: flask run --host=0.0.0.0
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: app.py
+      SQLALCHEMY_DATABASE_URI: postgresql://flaskuser:mysecurepassword123!@db/flask_openai_app
+    volumes:
+      - .:/app  # Mount the current directory to the container
+    ports:
+      - "5001:5000"
+    depends_on:
+      - db  # Make sure the database starts before Flask
+
+volumes:
+  postgres_data:  # Named volume to persist PostgreSQL data

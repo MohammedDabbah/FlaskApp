@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Question App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            margin: 0 auto;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ask AI a Question</h1>
+        <form id="questionForm">
+            <input type="text" id="question" placeholder="Enter your question" required>
+            <button type="submit">Ask</button>
+        </form>
+        <div id="answerSection" style="display: none;">
+            <h2>Answer:</h2>
+            <p id="answer"></p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('questionForm');
+        const answerSection = document.getElementById('answerSection');
+        const answerText = document.getElementById('answer');
+
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();  // Prevent page reload
+
+            const question = document.getElementById('question').value;
+
+            // Send the question to the Flask backend
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ question }),
+            });
+
+            // Get the response data
+            const data = await response.json();
+
+            // Display the answer
+            answerText.textContent = data.answer;
+            answerSection.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
