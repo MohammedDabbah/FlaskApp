@@ -49,3 +49,5 @@ This is a simple Flask application that uses the OpenAI API to answer questions.
 - Pytest (for testing)
 
 ## Warnning the password and the key are used just for example the key will no longer be active . 
+normaly we need to use .env to keep it secure 
+
